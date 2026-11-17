@@ -1,0 +1,36 @@
+plugins {
+    id 'war'     //ensina o Gradle a empacotar uma aplicação web em .war
+}
+
+group = 'com.empresa.rh'
+version = '1.0.0'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+// Garante que acentos no código Java sejam lidos corretamente
+compileJava.options.encoding = 'UTF-8'
+compileTestJava.options.encoding = 'UTF-8'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // Já vêm dentro do WildFly: usadas para compilar, mas NÃO vão no WAR
+    providedCompile 'javax:javaee-api:7.0'
+    providedCompile 'org.hibernate:hibernate-core:5.0.10.Final'
+    providedCompile 'org.hibernate:hibernate-entitymanager:5.0.10.Final'
+
+    // Vão dentro do WAR (o WildFly não as fornece)
+    implementation 'org.mindrot:jbcrypt:0.4'
+
+    // Testes
+    testImplementation 'junit:junit:4.12'
+    testImplementation 'org.mockito:mockito-core:3.12.4'
+}
+
+// Nome fixo do arquivo gerado: build/libs/rh.war
+war {
+    archiveFileName = 'rh.war'
+}
