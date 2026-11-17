@@ -7,15 +7,19 @@
 
     <display-name>Gestao RH</display-name>
 
-    <!-- Development mostra mensagens de erro detalhadas. Em produção seria Production -->
     <context-param>
         <param-name>javax.faces.PROJECT_STAGE</param-name>
         <param-value>Development</param-value>
     </context-param>
 
-    <!-- Campo de texto vazio vira null (e não "") -->
     <context-param>
         <param-name>javax.faces.INTERPRET_EMPTY_STRING_SUBMITTED_VALUES_AS_NULL</param-name>
+        <param-value>true</param-value>
+    </context-param>
+
+    <!-- Datas usam o fuso do servidor (e não GMT), evitando o erro de "um dia a menos" -->
+    <context-param>
+        <param-name>javax.faces.DATETIMECONVERTER_DEFAULT_TIMEZONE_IS_SYSTEM_TIMEZONE</param-name>
         <param-value>true</param-value>
     </context-param>
 
@@ -24,7 +28,6 @@
         <param-value>true</param-value>
     </context-param>
 
-    <!-- O servlet do JSF: processa todas as páginas .xhtml -->
     <servlet>
         <servlet-name>Faces Servlet</servlet-name>
         <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
@@ -35,12 +38,10 @@
         <url-pattern>*.xhtml</url-pattern>
     </servlet-mapping>
 
-    <!-- Página inicial -->
     <welcome-file-list>
         <welcome-file>index.xhtml</welcome-file>
     </welcome-file-list>
 
-    <!-- Sessão expira após 30 minutos sem uso -->
     <session-config>
         <session-timeout>30</session-timeout>
     </session-config>
