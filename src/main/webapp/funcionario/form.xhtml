@@ -1,0 +1,179 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+                template="/WEB-INF/templates/layout.xhtml">
+
+    <ui:define name="titulo">Funcionário</ui:define>
+
+    <ui:define name="metadata">
+        <f:viewParam name="id" value="#{funcionarioController.id}"/>
+        <f:viewAction action="#{funcionarioController.carregar}"/>
+    </ui:define>
+
+    <ui:define name="conteudo">
+        <div class="cartao">
+            <h2>#{empty funcionarioController.funcionario.id ? 'Novo funcionário' : 'Editar funcionário'}</h2>
+
+            <h:form id="form">
+
+                <!-- ============ DADOS PESSOAIS ============ -->
+                <fieldset class="grupo">
+                    <legend>Dados pessoais</legend>
+                    <h:panelGrid columns="3" styleClass="formulario">
+
+                        <h:outputLabel for="matricula" value="Matrícula *"/>
+                        <h:inputText id="matricula" value="#{funcionarioController.funcionario.matricula}"
+                                     maxlength="20" required="true"
+                                     requiredMessage="A matrícula é obrigatória"/>
+                        <h:message for="matricula" styleClass="campo-erro"/>
+
+                        <h:outputLabel for="nome" value="Nome completo *"/>
+                        <h:inputText id="nome" value="#{funcionarioController.funcionario.nome}"
+                                     maxlength="150" required="true"
+                                     requiredMessage="O nome é obrigatório"/>
+                        <h:message for="nome" styleClass="campo-erro"/>
+
+                        <h:outputLabel for="cpf" value="CPF *"/>
+                        <h:inputText id="cpf" value="#{funcionarioController.funcionario.cpf}"
+                                     converter="digitosConverter" maxlength="14" required="true"
+                                     requiredMessage="O CPF é obrigatório"
+                                     pt:placeholder="000.000.000-00"/>
+                        <h:message for="cpf" styleClass="campo-erro"/>
+
+                        <h:outputLabel for="rg" value="RG"/>
+                        <h:inputText id="rg" value="#{funcionarioController.funcionario.rg}"
+                                     maxlength="20"/>
+                        <h:message for="rg" styleClass="campo-erro"/>
+
+                        <h:outputLabel for="nascimento" value="Data de nascimento"/>
+                        <h:inputText id="nascimento"
+                                     value="#{funcionarioController.funcionario.dataNascimento}"
+                                     converterMessage="Data inválida. Use dd/mm/aaaa"
+                                     pt:placeholder="dd/mm/aaaa">
+                            <f:convertDateTime pattern="dd/MM/yyyy"/>
+                        </h:inputText>
+                        <h:message for="nascimento" styleClass="campo-erro"/>
+
+                        <h:outputLabel for="email" value="E-mail"/>
+                        <h:inputText id="email" value="#{funcionarioController.funcionario.email}"
+                                     maxlength="150"/>
+                        <h:message for="email" styleClass="campo-erro"/>
+
+                        <h:outputLabel for="telefone" value="Telefone"/>
+                        <h:inputText id="telefone" value="#{funcionarioController.funcionario.telefone}"
+                                     maxlength="20" pt:placeholder="(81) 99999-9999"/>
+                        <h:message for="telefone" styleClass="campo-erro"/>
+                    </h:panelGrid>
+                </fieldset>
+
+                <!-- ============ DADOS PROFISSIONAIS ============ -->
+                <fieldset class="grupo">
+                    <legend>Dados profissionais</legend>
+                    <h:panelGrid columns="3" styleClass="formulario">
+
+                        <h:outputLabel for="admissao" value="Data de admissão *"/>
+                        <h:inputText id="admissao"
+                                     value="#{funcionarioController.funcionario.dataAdmissao}"
+                                     required="true" requiredMessage="A data de admissão é obrigatória"
+                                     converterMessage="Data inválida. Use dd/mm/aaaa"
+                                     pt:placeholder="dd/mm/aaaa">
+                            <f:convertDateTime pattern="dd/MM/yyyy"/>
+                        </h:inputText>
+                        <h:message for="admissao" styleClass="campo-erro"/>
+
+                        <h:outputLabel for="departamento" value="Departamento *"/>
+                        <h:selectOneMenu id="departamento"
+                                         value="#{funcionarioController.funcionario.departamento}"
+                                         converter="#{departamentoConverter}"
+                                         required="true" requiredMessage="Selecione o departamento">
+                            <f:selectItem itemLabel="Selecione..." noSelectionOption="true"/>
+                            <f:selectItems value="#{funcionarioController.departamentos}" var="d"
+                                           itemValue="#{d}" itemLabel="#{d.nome}"/>
+                        </h:selectOneMenu>
+                        <h:message for="departamento" styleClass="campo-erro"/>
+
+                        <h:outputLabel for="cargo" value="Cargo *"/>
+                        <h:selectOneMenu id="cargo"
+                                         value="#{funcionarioController.funcionario.cargo}"
+                                         converter="#{cargoConverter}"
+                                         required="true" requiredMessage="Selecione o cargo">
+                            <f:selectItem itemLabel="Selecione..." noSelectionOption="true"/>
+                            <f:selectItems value="#{funcionarioController.cargos}" var="c"
+                                           itemValue="#{c}" itemLabel="#{c.nome}"/>
+                            <!-- AJAX: ao trocar o cargo, sugere o salário sem recarregar a página -->
+                            <f:ajax listener="#{funcionarioController.cargoSelecionado}"
+                                    render="salario"/>
+                        </h:selectOneMenu>
+                        <h:message for="cargo" styleClass="campo-erro"/>
+
+                        <h:outputLabel for="salario" value="Salário (R$) *"/>
+                        <h:inputText id="salario"
+                                     value="#{funcionarioController.funcionario.salarioAtual}"
+                                     required="true" requiredMessage="O salário é obrigatório"
+                                     converterMessage="Valor inválido. Exemplo: 4500,00"
+                                     disabled="#{not empty funcionarioController.funcionario.id}">
+                            <f:convertNumber minFractionDigits="2" maxFractionDigits="2"/>
+                        </h:inputText>
+                        <h:message for="salario" styleClass="campo-erro"/>
+                    </h:panelGrid>
+                    <h:outputText styleClass="dica"
+                                  rendered="#{not empty funcionarioController.funcionario.id}"
+                                  value="O salário só pode ser alterado pela atualização salarial, que registra o histórico."/>
+                </fieldset>
+
+                <!-- ============ ENDEREÇO ============ -->
+                <fieldset class="grupo">
+                    <legend>Endereço</legend>
+                    <h:panelGrid columns="3" styleClass="formulario">
+
+                        <h:outputLabel for="cep" value="CEP"/>
+                        <h:inputText id="cep" value="#{funcionarioController.funcionario.endereco.cep}"
+                                     converter="digitosConverter" maxlength="9"
+                                     pt:placeholder="00000-000"/>
+                        <h:message for="cep" styleClass="campo-erro"/>
+
+                        <h:outputLabel for="logradouro" value="Logradouro"/>
+                        <h:inputText id="logradouro"
+                                     value="#{funcionarioController.funcionario.endereco.logradouro}"
+                                     maxlength="150"/>
+                        <h:message for="logradouro" styleClass="campo-erro"/>
+
+                        <h:outputLabel for="numero" value="Número"/>
+                        <h:inputText id="numero"
+                                     value="#{funcionarioController.funcionario.endereco.numero}"
+                                     maxlength="10"/>
+                        <h:message for="numero" styleClass="campo-erro"/>
+
+                        <h:outputLabel for="complemento" value="Complemento"/>
+                        <h:inputText id="complemento"
+                                     value="#{funcionarioController.funcionario.endereco.complemento}"
+                                     maxlength="100"/>
+                        <h:message for="complemento" styleClass="campo-erro"/>
+
+                        <h:outputLabel for="bairro" value="Bairro"/>
+                        <h:inputText id="bairro"
+                                     value="#{funcionarioController.funcionario.endereco.bairro}"
+                                     maxlength="100"/>
+                        <h:message for="bairro" styleClass="campo-erro"/>
+
+                        <h:outputLabel for="cidade" value="Cidade"/>
+                        <h:inputText id="cidade"
+                                     value="#{funcionarioController.funcionario.endereco.cidade}"
+                                     maxlength="100"/>
+                        <h:message for="cidade" styleClass="campo-erro"/>
+
+                        <h:outputLabel for="uf" value="UF"/>
+                        <h:inputText id="uf" value="#{funcionarioController.funcionario.endereco.uf}"
+                                     maxlength="2" pt:placeholder="PE"/>
+                        <h:message for="uf" styleClass="campo-erro"/>
+                    </h:panelGrid>
+                </fieldset>
+
+                <h:commandButton value="Salvar" action="#{funcionarioController.salvar}"/>
+                <h:link value="Cancelar" outcome="lista" styleClass="botao botao-cinza"/>
+            </h:form>
+        </div>
+    </ui:define>
+</ui:composition>

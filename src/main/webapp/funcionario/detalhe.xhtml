@@ -1,0 +1,78 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/WEB-INF/templates/layout.xhtml">
+
+    <ui:define name="titulo">Detalhes do funcionário</ui:define>
+
+    <ui:define name="metadata">
+        <f:viewParam name="id" value="#{funcionarioController.id}"/>
+        <f:viewAction action="#{funcionarioController.carregar}"/>
+    </ui:define>
+
+    <ui:define name="conteudo">
+        <div class="cartao">
+            <h2>#{funcionarioController.funcionario.nome}</h2>
+
+            <h3>Dados pessoais</h3>
+            <dl class="detalhe">
+                <dt>Matrícula</dt>
+                <dd>#{funcionarioController.funcionario.matricula}</dd>
+                <dt>CPF</dt>
+                <dd><h:outputText value="#{funcionarioController.funcionario.cpf}"
+                                  converter="digitosConverter"/></dd>
+                <dt>RG</dt>
+                <dd>#{funcionarioController.funcionario.rg}</dd>
+                <dt>Nascimento</dt>
+                <dd><h:outputText value="#{funcionarioController.funcionario.dataNascimento}">
+                    <f:convertDateTime pattern="dd/MM/yyyy"/>
+                </h:outputText></dd>
+                <dt>E-mail</dt>
+                <dd>#{funcionarioController.funcionario.email}</dd>
+                <dt>Telefone</dt>
+                <dd>#{funcionarioController.funcionario.telefone}</dd>
+            </dl>
+
+            <h3>Dados profissionais</h3>
+            <dl class="detalhe">
+                <dt>Situação</dt>
+                <dd>#{funcionarioController.funcionario.situacao.descricao}</dd>
+                <dt>Admissão</dt>
+                <dd><h:outputText value="#{funcionarioController.funcionario.dataAdmissao}">
+                    <f:convertDateTime pattern="dd/MM/yyyy"/>
+                </h:outputText></dd>
+                <dt>Departamento</dt>
+                <dd>#{funcionarioController.funcionario.departamento.nome}</dd>
+                <dt>Cargo</dt>
+                <dd>#{funcionarioController.funcionario.cargo.nome}</dd>
+                <dt>Salário atual</dt>
+                <dd><h:outputText value="#{funcionarioController.funcionario.salarioAtual}">
+                    <f:convertNumber type="currency" currencySymbol="R$"/>
+                </h:outputText></dd>
+            </dl>
+
+            <h3>Endereço</h3>
+            <dl class="detalhe">
+                <dt>Logradouro</dt>
+                <dd>#{funcionarioController.funcionario.endereco.logradouro}
+                    #{funcionarioController.funcionario.endereco.numero}</dd>
+                <dt>Complemento</dt>
+                <dd>#{funcionarioController.funcionario.endereco.complemento}</dd>
+                <dt>Bairro</dt>
+                <dd>#{funcionarioController.funcionario.endereco.bairro}</dd>
+                <dt>Cidade/UF</dt>
+                <dd>#{funcionarioController.funcionario.endereco.cidade}
+                    #{funcionarioController.funcionario.endereco.uf}</dd>
+                <dt>CEP</dt>
+                <dd><h:outputText value="#{funcionarioController.funcionario.endereco.cep}"
+                                  converter="digitosConverter"/></dd>
+            </dl>
+
+            <h:link value="Editar" outcome="form" styleClass="botao">
+                <f:param name="id" value="#{funcionarioController.funcionario.id}"/>
+            </h:link>
+            <h:link value="Voltar" outcome="lista" styleClass="botao botao-cinza"/>
+        </div>
+    </ui:define>
+</ui:composition>
