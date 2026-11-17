@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence
+                                 http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd"
+             version="2.1">
+
+    <persistence-unit name="rhPU" transaction-type="JTA">
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+
+        <!-- Nome do DataSource que criamos na etapa 3 -->
+        <jta-data-source>java:jboss/datasources/RHDS</jta-data-source>
+
+        <properties>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQL9Dialect"/>
+            <!-- none: o Hibernate NÃO altera as tabelas. Quem manda no banco são nossos scripts SQL -->
+            <property name="hibernate.hbm2ddl.auto" value="none"/>
+            <!-- Mostra no console do WildFly o SQL gerado (ótimo para aprender) -->
+            <property name="hibernate.show_sql" value="true"/>
+            <property name="hibernate.format_sql" value="true"/>
+        </properties>
+    </persistence-unit>
+</persistence>
+
+        <!-- essa classe é a ponte entre o Java e o banco  -->

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jboss-web>
+    <context-root>/rh</context-root>
+</jboss-web>
+
+        <!-- Configuração específica do WildFly. o context-root define o início do endereço : http://localhost:8080/rh -->
