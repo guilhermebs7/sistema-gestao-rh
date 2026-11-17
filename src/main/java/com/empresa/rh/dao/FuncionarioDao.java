@@ -3,6 +3,7 @@ package com.empresa.rh.dao;
 import com.empresa.rh.model.Funcionario;
 import java.util.List;
 import javax.ejb.Stateless;
+import javax.persistence.TypedQuery;
 
 @Stateless
 public class FuncionarioDao extends GenericDao<Funcionario> {
@@ -13,8 +14,7 @@ public class FuncionarioDao extends GenericDao<Funcionario> {
 
     @Override
     public List<Funcionario> listarTodos() {
-        return em.createQuery("select f from Funcionario f order by f.nome", Funcionario.class)
-                .getResultList();
+        return pesquisar(null);
     }
 
     public Funcionario buscarPorCpf(String cpf) {
@@ -30,20 +30,37 @@ public class FuncionarioDao extends GenericDao<Funcionario> {
                         .setParameter("matricula", matricula));
     }
 
-    // Pesquisa por parte do nome, da matrícula ou do CPF
+    /**
+     * Pesquisa por parte do nome, da matrícula ou do CPF (com ou sem pontuação).
+     * Termo vazio devolve todos.
+     */
     public List<Funcionario> pesquisar(String termo) {
-        if (termo == null || termo.trim().isEmpty()) {
-            return listarTodos();
+        String texto = termo == null ? "" : termo.trim();
+        String digitos = texto.replaceAll("\\D", "");
+        boolean filtrar = !texto.isEmpty();
+
+        // Só montamos o TEXTO da consulta com pedaços fixos (escritos por nós).
+        // O que o usuário digitou entra SEMPRE por setParameter: seguro contra SQL Injection.
+        StringBuilder jpql = new StringBuilder(
+                "select f from Funcionario f "
+                        + "join fetch f.departamento join fetch f.cargo left join fetch f.endereco ");
+        if (filtrar) {
+            jpql.append("where (lower(f.nome) like :termo or lower(f.matricula) like :termo ");
+            if (!digitos.isEmpty()) {
+                jpql.append("or f.cpf like :cpf ");
+            }
+            jpql.append(") ");
         }
-        String padrao = "%" + termo.trim().toLowerCase() + "%";
-        return em.createQuery(
-                        "select f from Funcionario f "
-                                + "where lower(f.nome) like :termo "
-                                + "   or lower(f.matricula) like :termo "
-                                + "   or f.cpf like :termo "
-                                + "order by f.nome", Funcionario.class)
-                .setParameter("termo", padrao)
-                .getResultList();
+        jpql.append("order by f.nome");
+
+        TypedQuery<Funcionario> query = em.createQuery(jpql.toString(), Funcionario.class);
+        if (filtrar) {
+            query.setParameter("termo", "%" + texto.toLowerCase() + "%");
+            if (!digitos.isEmpty()) {
+                query.setParameter("cpf", "%" + digitos + "%");
+            }
+        }
+        return query.getResultList();
     }
 
     // Usados para impedir excluir departamento/cargo que ainda têm funcionários
