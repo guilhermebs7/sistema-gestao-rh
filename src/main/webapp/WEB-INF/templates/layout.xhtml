@@ -4,7 +4,6 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
 
-<!-- Espaço onde as páginas declaram parâmetros de URL (f:viewParam / f:viewAction) -->
 <f:metadata>
     <ui:insert name="metadata"/>
 </f:metadata>
@@ -14,6 +13,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <title><ui:insert name="titulo">Início</ui:insert> - Gestão de RH</title>
     <h:outputStylesheet library="css" name="estilo.css"/>
+    <h:outputStylesheet library="css" name="funcionario.css"/>
 </h:head>
 
 <h:body>
@@ -23,12 +23,12 @@
 
     <nav>
         <h:link value="Início" outcome="/index"/>
+        <h:link value="Funcionários" outcome="/funcionario/lista"/>
         <h:link value="Departamentos" outcome="/departamento/lista"/>
         <h:link value="Cargos" outcome="/cargo/lista"/>
     </nav>
 
     <main>
-        <!-- Mensagens globais (sucesso e erros de regra de negócio) -->
         <h:messages globalOnly="true" layout="list" styleClass="mensagens"
                     infoClass="msg-info" errorClass="msg-erro"/>
 
@@ -38,5 +38,3 @@
     <footer>Gestão de RH &#169; 2026</footer>
 </h:body>
 </html>
-
-        <!-- Template define a moldura (cabeçalho, menu, rodape) uma unica vez  -->
