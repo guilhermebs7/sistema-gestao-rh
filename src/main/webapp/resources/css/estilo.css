@@ -1,0 +1,103 @@
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f3f5f8;
+    color: #26323f;
+}
+
+header {
+    background: #1f3a5f;
+    color: #fff;
+    padding: 14px 24px;
+}
+header h1 { margin: 0; font-size: 20px; }
+
+nav {
+    background: #2c5282;
+    padding: 0 24px;
+}
+nav a {
+    display: inline-block;
+    padding: 12px 16px;
+    color: #fff;
+    text-decoration: none;
+}
+nav a:hover { background: #1f3a5f; }
+
+main {
+    max-width: 960px;
+    margin: 24px auto;
+    padding: 0 16px;
+}
+
+h2 { margin-top: 0; }
+
+.cartao {
+    background: #fff;
+    border-radius: 6px;
+    padding: 20px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, .12);
+    margin-bottom: 20px;
+}
+
+/* Botões e links com aparência de botão */
+.botao, input[type=submit] {
+    display: inline-block;
+    background: #2c5282;
+    color: #fff;
+    border: 0;
+    border-radius: 4px;
+    padding: 9px 16px;
+    font-size: 14px;
+    text-decoration: none;
+    cursor: pointer;
+}
+.botao:hover, input[type=submit]:hover { background: #1f3a5f; }
+.botao-cinza { background: #718096; }
+.botao-cinza:hover { background: #4a5568; }
+
+/* Tabelas */
+table.tabela { width: 100%; border-collapse: collapse; margin-top: 12px; }
+table.tabela th {
+    background: #e2e8f0;
+    text-align: left;
+    padding: 10px;
+}
+table.tabela td { padding: 10px; border-bottom: 1px solid #e2e8f0; }
+table.tabela tr:hover td { background: #f7fafc; }
+.acoes a { margin-right: 12px; color: #2c5282; }
+.acoes .excluir { color: #c53030; }
+
+/* Formulários */
+.formulario td { padding: 6px 10px 6px 0; vertical-align: top; }
+.formulario input[type=text], .formulario textarea {
+    width: 100%;
+    min-width: 260px;
+    padding: 8px;
+    border: 1px solid #cbd5e0;
+    border-radius: 4px;
+    font-family: inherit;
+    font-size: 14px;
+}
+
+/* Mensagens */
+.msg-info, .msg-erro {
+    list-style: none;
+    padding: 10px 14px;
+    margin: 0 0 6px 0;
+    border-radius: 4px;
+}
+ul.mensagens { padding: 0; margin: 0 0 16px 0; }
+.msg-info { background: #c6f6d5; color: #22543d; }
+.msg-erro { background: #fed7d7; color: #742a2a; }
+.campo-erro { color: #c53030; font-size: 13px; }
+
+footer { text-align: center; color: #718096; padding: 24px; font-size: 13px; }
+
+/* Telas pequenas */
+@media (max-width: 600px) {
+    table.tabela { font-size: 13px; }
+    .formulario input[type=text], .formulario textarea { min-width: 0; }
+}
