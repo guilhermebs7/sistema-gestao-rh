@@ -6,11 +6,7 @@
 
     <ui:define name="titulo">Departamento</ui:define>
 
-    <!-- Lê ?id=... da URL e, se houver, carrega o registro para edição -->
-    <ui:define name="metadata">
-        <f:viewParam name="id" value="#{departamentoController.id}"/>
-        <f:viewAction action="#{departamentoController.carregar}"/>
-    </ui:define>
+
 
     <ui:define name="conteudo">
         <div class="cartao">

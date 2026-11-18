@@ -7,11 +7,6 @@
 
     <ui:define name="titulo">Funcionário</ui:define>
 
-    <ui:define name="metadata">
-        <f:viewParam name="id" value="#{funcionarioController.id}"/>
-        <f:viewAction action="#{funcionarioController.carregar}"/>
-    </ui:define>
-
     <ui:define name="conteudo">
         <div class="cartao">
             <h2>#{empty funcionarioController.funcionario.id ? 'Novo funcionário' : 'Editar funcionário'}</h2>
