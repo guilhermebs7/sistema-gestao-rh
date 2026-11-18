@@ -4,6 +4,13 @@
     align-items: center;
     justify-content: center;
     min-height: 100vh;
+
+    /* Foto de fundo */
+    background-image: url("#{resource['img/fundo-login.jpg']}");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
 }
 .caixa-login {
     background: #fff;
