@@ -29,13 +29,14 @@ public class LoginController {
         try {
             Administrador admin = autenticacaoService.autenticar(login, senha);
 
-            // Troca o identificador da sessão no login (evita "session fixation")
+            // Grava o admin na sessão primeiro...
+            sessaoAdmin.entrar(admin);
+
+            // ...e só depois troca o identificador da sessão (evita "session fixation")
             HttpServletRequest request = (HttpServletRequest)
                     FacesContext.getCurrentInstance().getExternalContext().getRequest();
-            request.getSession(true);
             request.changeSessionId();
 
-            sessaoAdmin.entrar(admin);
             return "/index?faces-redirect=true";
         } catch (NegocioException e) {
             JsfUtil.erro(e);
