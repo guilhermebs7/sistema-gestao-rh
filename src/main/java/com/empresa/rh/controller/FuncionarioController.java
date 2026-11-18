@@ -11,6 +11,7 @@ import com.empresa.rh.service.FuncionarioService;
 import com.empresa.rh.util.JsfUtil;
 import java.io.Serializable;
 import java.util.List;
+import javax.annotation.PostConstruct;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -24,7 +25,6 @@ public class FuncionarioController implements Serializable {
     @Inject
     private FuncionarioService funcionarioService;
 
-    // Só para preencher as listas de seleção (departamento e cargo) do formulário
     @Inject
     private DepartamentoService departamentoService;
 
@@ -45,26 +45,26 @@ public class FuncionarioController implements Serializable {
         return f;
     }
 
-    // O formulário precisa de um Endereco (mesmo vazio) para ligar os campos
     private void garantirEndereco() {
         if (funcionario.getEndereco() == null) {
             funcionario.setEndereco(new Endereco());
         }
     }
 
-    /** Chamado ao abrir form.xhtml ou detalhe.xhtml com ?id=... */
-    public String carregar() {
+    /** Roda uma vez, quando a página é aberta: lê ?id= da URL e carrega o funcionário. */
+    @PostConstruct
+    public void init() {
+        id = JsfUtil.parametroId("id");
         if (id != null) {
             Funcionario encontrado = funcionarioService.buscarPorId(id);
             if (encontrado == null) {
                 JsfUtil.erro("Funcionário não encontrado.");
-                JsfUtil.manterMensagens();
-                return "lista?faces-redirect=true";
+                id = null;
+            } else {
+                funcionario = encontrado;
+                garantirEndereco();
             }
-            funcionario = encontrado;
-            garantirEndereco();
         }
-        return null;
     }
 
     public String salvar() {
@@ -75,7 +75,6 @@ public class FuncionarioController implements Serializable {
             return "lista?faces-redirect=true";
         } catch (NegocioException e) {
             JsfUtil.erro(e);
-            // O Service pode ter zerado o endereço em branco; o formulário precisa dele de volta
             garantirEndereco();
             return null;
         }
@@ -92,7 +91,7 @@ public class FuncionarioController implements Serializable {
         } catch (NegocioException e) {
             JsfUtil.erro(e);
         }
-        funcionarios = null; // recarrega mantendo o termo de busca
+        funcionarios = null;
     }
 
     public void reativar(Funcionario f) {
@@ -105,7 +104,6 @@ public class FuncionarioController implements Serializable {
         funcionarios = null;
     }
 
-    /** Ao escolher o cargo num cadastro NOVO, sugere o salário-base dele. */
     public void cargoSelecionado() {
         if (funcionario.getId() == null && funcionario.getCargo() != null) {
             funcionario.setSalarioAtual(funcionario.getCargo().getSalarioBase());
@@ -134,7 +132,6 @@ public class FuncionarioController implements Serializable {
     }
 
     public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
 
     public Funcionario getFuncionario() { return funcionario; }
     public void setFuncionario(Funcionario funcionario) { this.funcionario = funcionario; }

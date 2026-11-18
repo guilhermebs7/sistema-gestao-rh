@@ -1,5 +1,6 @@
 package com.empresa.rh.controller;
 
+import javax.annotation.PostConstruct;
 import com.empresa.rh.exception.NegocioException;
 import com.empresa.rh.model.Departamento;
 import com.empresa.rh.service.DepartamentoService;
@@ -23,20 +24,18 @@ public class DepartamentoController implements Serializable {
     private Departamento departamento = new Departamento();
     private List<Departamento> departamentos;          // carregada sob demanda
 
-    /**
-     * Chamado quando form.xhtml abre. Com id, carrega para editar; sem id, é um cadastro novo.
-     */
-    public String carregar() {
+    @PostConstruct
+    public void init() {
+        id = JsfUtil.parametroId("id");
         if (id != null) {
             Departamento encontrado = departamentoService.buscarPorId(id);
             if (encontrado == null) {
                 JsfUtil.erro("Departamento não encontrado.");
-                JsfUtil.manterMensagens();
-                return "lista?faces-redirect=true";
+                id = null;
+            } else {
+                departamento = encontrado;
             }
-            departamento = encontrado;
         }
-        return null; // null = permanece na página
     }
 
     public String salvar() {
@@ -69,7 +68,7 @@ public class DepartamentoController implements Serializable {
     }
 
     public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+
 
     public Departamento getDepartamento() { return departamento; }
     public void setDepartamento(Departamento departamento) { this.departamento = departamento; }

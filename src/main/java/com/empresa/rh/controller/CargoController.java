@@ -6,6 +6,7 @@ import com.empresa.rh.service.CargoService;
 import com.empresa.rh.util.JsfUtil;
 import java.io.Serializable;
 import java.util.List;
+import javax.annotation.PostConstruct;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -23,17 +24,18 @@ public class CargoController implements Serializable {
     private Cargo cargo = new Cargo();
     private List<Cargo> cargos;
 
-    public String carregar() {
+    @PostConstruct
+    public void init() {
+        id = JsfUtil.parametroId("id");
         if (id != null) {
             Cargo encontrado = cargoService.buscarPorId(id);
             if (encontrado == null) {
                 JsfUtil.erro("Cargo não encontrado.");
-                JsfUtil.manterMensagens();
-                return "lista?faces-redirect=true";
+                id = null;
+            } else {
+                cargo = encontrado;
             }
-            cargo = encontrado;
         }
-        return null;
     }
 
     public String salvar() {
@@ -66,7 +68,7 @@ public class CargoController implements Serializable {
     }
 
     public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+
 
     public Cargo getCargo() { return cargo; }
     public void setCargo(Cargo cargo) { this.cargo = cargo; }
