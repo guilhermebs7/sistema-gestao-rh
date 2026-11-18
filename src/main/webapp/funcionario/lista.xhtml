@@ -18,7 +18,6 @@
                     <h:inputText id="termo" value="#{funcionarioController.termoBusca}"
                                  pt:placeholder="Buscar por nome, CPF ou matrícula"/>
                     <h:commandButton value="Pesquisar" action="#{funcionarioController.pesquisar}"/>
-                    <!-- Link simples: recarrega a página do zero e limpa a busca -->
                     <h:link value="Limpar" outcome="lista" styleClass="botao botao-cinza"/>
                 </div>
 
@@ -61,6 +60,10 @@
                                 <f:param name="id" value="#{func.id}"/>
                             </h:link>
                             <h:link value="Editar" outcome="form">
+                                <f:param name="id" value="#{func.id}"/>
+                            </h:link>
+                            <h:link value="Salário" outcome="salario"
+                                    rendered="#{func.situacao.name() eq 'ATIVO'}">
                                 <f:param name="id" value="#{func.id}"/>
                             </h:link>
                             <h:commandLink value="Inativar" styleClass="excluir"

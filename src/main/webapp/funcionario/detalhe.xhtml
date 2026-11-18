@@ -6,11 +6,6 @@
 
     <ui:define name="titulo">Detalhes do funcionário</ui:define>
 
-    <ui:define name="metadata">
-        <f:viewParam name="id" value="#{funcionarioController.id}"/>
-        <f:viewAction action="#{funcionarioController.carregar}"/>
-    </ui:define>
-
     <ui:define name="conteudo">
         <div class="cartao">
             <h2>#{funcionarioController.funcionario.nome}</h2>
@@ -37,7 +32,8 @@
             <h3>Dados profissionais</h3>
             <dl class="detalhe">
                 <dt>Situação</dt>
-                <dd>#{funcionarioController.funcionario.situacao.descricao}</dd>
+                <dd><h:outputText value="#{funcionarioController.funcionario.situacao.descricao}"
+                                  styleClass="#{funcionarioController.funcionario.situacao.name() eq 'ATIVO' ? 'selo selo-ativo' : 'selo selo-inativo'}"/></dd>
                 <dt>Admissão</dt>
                 <dd><h:outputText value="#{funcionarioController.funcionario.dataAdmissao}">
                     <f:convertDateTime pattern="dd/MM/yyyy"/>
@@ -69,10 +65,47 @@
                                   converter="digitosConverter"/></dd>
             </dl>
 
-            <h:link value="Editar" outcome="form" styleClass="botao">
-                <f:param name="id" value="#{funcionarioController.funcionario.id}"/>
-            </h:link>
-            <h:link value="Voltar" outcome="lista" styleClass="botao botao-cinza"/>
+            <h3>Histórico salarial</h3>
+            <h:dataTable value="#{historicoSalarialController.historico}" var="h"
+                         styleClass="tabela"
+                         rendered="#{not empty historicoSalarialController.historico}">
+                <h:column>
+                    <f:facet name="header">Data</f:facet>
+                    <h:outputText value="#{h.dataAlteracao}">
+                        <f:convertDateTime pattern="dd/MM/yyyy HH:mm"/>
+                    </h:outputText>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Salário anterior</f:facet>
+                    <h:outputText value="#{h.salarioAnterior}">
+                        <f:convertNumber type="currency" currencySymbol="R$"/>
+                    </h:outputText>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Salário novo</f:facet>
+                    <h:outputText value="#{h.salarioNovo}">
+                        <f:convertNumber type="currency" currencySymbol="R$"/>
+                    </h:outputText>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Motivo</f:facet>
+                    <h:outputText value="#{h.motivo}"/>
+                </h:column>
+            </h:dataTable>
+            <h:outputText value="Nenhuma alteração registrada."
+                          rendered="#{empty historicoSalarialController.historico}"/>
+
+            <p>
+                <h:link value="Editar" outcome="form" styleClass="botao"
+                        rendered="#{not empty funcionarioController.funcionario.id}">
+                    <f:param name="id" value="#{funcionarioController.funcionario.id}"/>
+                </h:link>
+                <h:link value="Atualizar salário" outcome="salario" styleClass="botao"
+                        rendered="#{not empty funcionarioController.funcionario.id and funcionarioController.funcionario.situacao.name() eq 'ATIVO'}">
+                    <f:param name="id" value="#{funcionarioController.funcionario.id}"/>
+                </h:link>
+                <h:link value="Voltar" outcome="lista" styleClass="botao botao-cinza"/>
+            </p>
         </div>
     </ui:define>
 </ui:composition>
