@@ -4,15 +4,12 @@ import com.empresa.rh.exception.NegocioException;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 
-/**
- * Isola o código do JSF para mostrar mensagens na tela. a classe JsfUtil centraliza e facilita a exibição de mensagens para o user na interface do sistema , utilizando o JSF
- */
 public final class JsfUtil {
 
     private JsfUtil() {
     }
 
-    public static void info(String mensagem) {     //Exibe mensagens informativas
+    public static void info(String mensagem) {
         adicionar(FacesMessage.SEVERITY_INFO, mensagem);
     }
 
@@ -26,15 +23,21 @@ public final class JsfUtil {
         }
     }
 
-    /**
-     * Use ANTES de redirecionar para outra página, senão a mensagem se perde.
-     */
     public static void manterMensagens() {
         FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
     }
 
+    /** Lê um parâmetro numérico da URL (ex.: ?id=3). Devolve null se ausente ou inválido. */
+    public static Long parametroId(String nome) {
+        String valor = FacesContext.getCurrentInstance().getExternalContext()
+                .getRequestParameterMap().get(nome);
+        if (valor == null || !valor.matches("\\d{1,18}")) {
+            return null;
+        }
+        return Long.valueOf(valor);
+    }
+
     private static void adicionar(FacesMessage.Severity severidade, String mensagem) {
-        // clientId null = mensagem "global" (aparece no topo da página)
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(severidade, mensagem, null));
     }
 }
