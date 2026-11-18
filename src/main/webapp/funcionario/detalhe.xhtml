@@ -8,94 +8,160 @@
 
     <ui:define name="conteudo">
         <div class="cartao">
-            <h2>#{funcionarioController.funcionario.nome}</h2>
+            <h2>Detalhes do funcionário</h2>
 
-            <h3>Dados pessoais</h3>
-            <dl class="detalhe">
-                <dt>Matrícula</dt>
-                <dd>#{funcionarioController.funcionario.matricula}</dd>
-                <dt>CPF</dt>
-                <dd><h:outputText value="#{funcionarioController.funcionario.cpf}"
-                                  converter="digitosConverter"/></dd>
-                <dt>RG</dt>
-                <dd>#{funcionarioController.funcionario.rg}</dd>
-                <dt>Nascimento</dt>
-                <dd><h:outputText value="#{funcionarioController.funcionario.dataNascimento}">
-                    <f:convertDateTime pattern="dd/MM/yyyy"/>
-                </h:outputText></dd>
-                <dt>E-mail</dt>
-                <dd>#{funcionarioController.funcionario.email}</dd>
-                <dt>Telefone</dt>
-                <dd>#{funcionarioController.funcionario.telefone}</dd>
-            </dl>
+            <!-- Mesmo visual do formulário, mas com os campos somente leitura -->
+            <h:form id="form">
 
-            <h3>Dados profissionais</h3>
-            <dl class="detalhe">
-                <dt>Situação</dt>
-                <dd><h:outputText value="#{funcionarioController.funcionario.situacao.descricao}"
-                                  styleClass="#{funcionarioController.funcionario.situacao.name() eq 'ATIVO' ? 'selo selo-ativo' : 'selo selo-inativo'}"/></dd>
-                <dt>Admissão</dt>
-                <dd><h:outputText value="#{funcionarioController.funcionario.dataAdmissao}">
-                    <f:convertDateTime pattern="dd/MM/yyyy"/>
-                </h:outputText></dd>
-                <dt>Departamento</dt>
-                <dd>#{funcionarioController.funcionario.departamento.nome}</dd>
-                <dt>Cargo</dt>
-                <dd>#{funcionarioController.funcionario.cargo.nome}</dd>
-                <dt>Salário atual</dt>
-                <dd><h:outputText value="#{funcionarioController.funcionario.salarioAtual}">
-                    <f:convertNumber type="currency" currencySymbol="R$"/>
-                </h:outputText></dd>
-            </dl>
+                <!-- ============ DADOS PESSOAIS ============ -->
+                <fieldset class="grupo">
+                    <legend>Dados pessoais</legend>
+                    <h:panelGrid columns="2" styleClass="formulario">
 
-            <h3>Endereço</h3>
-            <dl class="detalhe">
-                <dt>Logradouro</dt>
-                <dd>#{funcionarioController.funcionario.endereco.logradouro}
-                    #{funcionarioController.funcionario.endereco.numero}</dd>
-                <dt>Complemento</dt>
-                <dd>#{funcionarioController.funcionario.endereco.complemento}</dd>
-                <dt>Bairro</dt>
-                <dd>#{funcionarioController.funcionario.endereco.bairro}</dd>
-                <dt>Cidade/UF</dt>
-                <dd>#{funcionarioController.funcionario.endereco.cidade}
-                    #{funcionarioController.funcionario.endereco.uf}</dd>
-                <dt>CEP</dt>
-                <dd><h:outputText value="#{funcionarioController.funcionario.endereco.cep}"
-                                  converter="digitosConverter"/></dd>
-            </dl>
+                        <h:outputLabel for="matricula" value="Matrícula"/>
+                        <h:inputText id="matricula" value="#{funcionarioController.funcionario.matricula}"
+                                     readonly="true"/>
 
-            <h3>Histórico salarial</h3>
-            <h:dataTable value="#{historicoSalarialController.historico}" var="h"
-                         styleClass="tabela"
-                         rendered="#{not empty historicoSalarialController.historico}">
-                <h:column>
-                    <f:facet name="header">Data</f:facet>
-                    <h:outputText value="#{h.dataAlteracao}">
-                        <f:convertDateTime pattern="dd/MM/yyyy HH:mm"/>
-                    </h:outputText>
-                </h:column>
-                <h:column>
-                    <f:facet name="header">Salário anterior</f:facet>
-                    <h:outputText value="#{h.salarioAnterior}">
-                        <f:convertNumber type="currency" currencySymbol="R$"/>
-                    </h:outputText>
-                </h:column>
-                <h:column>
-                    <f:facet name="header">Salário novo</f:facet>
-                    <h:outputText value="#{h.salarioNovo}">
-                        <f:convertNumber type="currency" currencySymbol="R$"/>
-                    </h:outputText>
-                </h:column>
-                <h:column>
-                    <f:facet name="header">Motivo</f:facet>
-                    <h:outputText value="#{h.motivo}"/>
-                </h:column>
-            </h:dataTable>
-            <h:outputText value="Nenhuma alteração registrada."
-                          rendered="#{empty historicoSalarialController.historico}"/>
+                        <h:outputLabel for="nome" value="Nome completo"/>
+                        <h:inputText id="nome" value="#{funcionarioController.funcionario.nome}"
+                                     readonly="true"/>
 
-            <p>
+                        <h:outputLabel for="cpf" value="CPF"/>
+                        <h:inputText id="cpf" value="#{funcionarioController.funcionario.cpf}"
+                                     converter="digitosConverter" readonly="true"/>
+
+                        <h:outputLabel for="rg" value="RG"/>
+                        <h:inputText id="rg" value="#{funcionarioController.funcionario.rg}"
+                                     readonly="true"/>
+
+                        <h:outputLabel for="nascimento" value="Data de nascimento"/>
+                        <h:inputText id="nascimento"
+                                     value="#{funcionarioController.funcionario.dataNascimento}"
+                                     readonly="true">
+                            <f:convertDateTime pattern="dd/MM/yyyy"/>
+                        </h:inputText>
+
+                        <h:outputLabel for="email" value="E-mail"/>
+                        <h:inputText id="email" value="#{funcionarioController.funcionario.email}"
+                                     readonly="true"/>
+
+                        <h:outputLabel for="telefone" value="Telefone"/>
+                        <h:inputText id="telefone" value="#{funcionarioController.funcionario.telefone}"
+                                     readonly="true"/>
+                    </h:panelGrid>
+                </fieldset>
+
+                <!-- ============ DADOS PROFISSIONAIS ============ -->
+                <fieldset class="grupo">
+                    <legend>Dados profissionais</legend>
+                    <h:panelGrid columns="2" styleClass="formulario">
+
+                        <h:outputLabel for="situacao" value="Situação"/>
+                        <h:inputText id="situacao"
+                                     value="#{funcionarioController.funcionario.situacao.descricao}"
+                                     readonly="true"/>
+
+                        <h:outputLabel for="admissao" value="Data de admissão"/>
+                        <h:inputText id="admissao"
+                                     value="#{funcionarioController.funcionario.dataAdmissao}"
+                                     readonly="true">
+                            <f:convertDateTime pattern="dd/MM/yyyy"/>
+                        </h:inputText>
+
+                        <h:outputLabel for="departamento" value="Departamento"/>
+                        <h:inputText id="departamento"
+                                     value="#{funcionarioController.funcionario.departamento.nome}"
+                                     readonly="true"/>
+
+                        <h:outputLabel for="cargo" value="Cargo"/>
+                        <h:inputText id="cargo"
+                                     value="#{funcionarioController.funcionario.cargo.nome}"
+                                     readonly="true"/>
+
+                        <h:outputLabel for="salario" value="Salário atual"/>
+                        <h:inputText id="salario"
+                                     value="#{funcionarioController.funcionario.salarioAtual}"
+                                     readonly="true">
+                            <f:convertNumber type="currency" currencySymbol="R$"/>
+                        </h:inputText>
+                    </h:panelGrid>
+                </fieldset>
+
+                <!-- ============ ENDEREÇO ============ -->
+                <fieldset class="grupo">
+                    <legend>Endereço</legend>
+                    <h:panelGrid columns="2" styleClass="formulario">
+
+                        <h:outputLabel for="cep" value="CEP"/>
+                        <h:inputText id="cep" value="#{funcionarioController.funcionario.endereco.cep}"
+                                     converter="digitosConverter" readonly="true"/>
+
+                        <h:outputLabel for="logradouro" value="Logradouro"/>
+                        <h:inputText id="logradouro"
+                                     value="#{funcionarioController.funcionario.endereco.logradouro}"
+                                     readonly="true"/>
+
+                        <h:outputLabel for="numero" value="Número"/>
+                        <h:inputText id="numero"
+                                     value="#{funcionarioController.funcionario.endereco.numero}"
+                                     readonly="true"/>
+
+                        <h:outputLabel for="complemento" value="Complemento"/>
+                        <h:inputText id="complemento"
+                                     value="#{funcionarioController.funcionario.endereco.complemento}"
+                                     readonly="true"/>
+
+                        <h:outputLabel for="bairro" value="Bairro"/>
+                        <h:inputText id="bairro"
+                                     value="#{funcionarioController.funcionario.endereco.bairro}"
+                                     readonly="true"/>
+
+                        <h:outputLabel for="cidade" value="Cidade"/>
+                        <h:inputText id="cidade"
+                                     value="#{funcionarioController.funcionario.endereco.cidade}"
+                                     readonly="true"/>
+
+                        <h:outputLabel for="uf" value="UF"/>
+                        <h:inputText id="uf" value="#{funcionarioController.funcionario.endereco.uf}"
+                                     readonly="true"/>
+                    </h:panelGrid>
+                </fieldset>
+            </h:form>
+
+            <!-- ============ HISTÓRICO SALARIAL ============ -->
+            <fieldset class="grupo">
+                <legend>Histórico salarial</legend>
+                <h:dataTable value="#{historicoSalarialController.historico}" var="h"
+                             styleClass="tabela"
+                             rendered="#{not empty historicoSalarialController.historico}">
+                    <h:column>
+                        <f:facet name="header">Data</f:facet>
+                        <h:outputText value="#{h.dataAlteracao}">
+                            <f:convertDateTime pattern="dd/MM/yyyy HH:mm"/>
+                        </h:outputText>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Salário anterior</f:facet>
+                        <h:outputText value="#{h.salarioAnterior}">
+                            <f:convertNumber type="currency" currencySymbol="R$"/>
+                        </h:outputText>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Salário novo</f:facet>
+                        <h:outputText value="#{h.salarioNovo}">
+                            <f:convertNumber type="currency" currencySymbol="R$"/>
+                        </h:outputText>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Motivo</f:facet>
+                        <h:outputText value="#{h.motivo}"/>
+                    </h:column>
+                </h:dataTable>
+                <h:outputText value="Nenhuma alteração registrada."
+                              rendered="#{empty historicoSalarialController.historico}"/>
+            </fieldset>
+
+            <div class="botoes">
                 <h:link value="Editar" outcome="form" styleClass="botao"
                         rendered="#{not empty funcionarioController.funcionario.id}">
                     <f:param name="id" value="#{funcionarioController.funcionario.id}"/>
@@ -105,7 +171,7 @@
                     <f:param name="id" value="#{funcionarioController.funcionario.id}"/>
                 </h:link>
                 <h:link value="Voltar" outcome="lista" styleClass="botao botao-cinza"/>
-            </p>
+            </div>
         </div>
     </ui:define>
 </ui:composition>
