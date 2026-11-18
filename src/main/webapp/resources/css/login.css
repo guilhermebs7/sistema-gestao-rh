@@ -1,0 +1,33 @@
+/* Tela de login */
+.pagina-login {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+}
+.caixa-login {
+    background: #fff;
+    width: 100%;
+    max-width: 380px;
+    margin: 16px;
+    padding: 28px;
+    border-radius: 6px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, .18);
+}
+.caixa-login h1 { margin: 0 0 4px 0; font-size: 22px; color: #1f3a5f; }
+.caixa-login .subtitulo { margin: 0 0 12px 0; color: #718096; font-size: 14px; }
+.caixa-login label { display: block; margin: 14px 0 4px 0; font-weight: bold; font-size: 14px; }
+.caixa-login input[type=text],
+.caixa-login input[type=password] {
+    width: 100%;
+    padding: 9px;
+    border: 1px solid #cbd5e0;
+    border-radius: 4px;
+    font-size: 14px;
+}
+.caixa-login input[type=submit] { width: 100%; margin-top: 18px; }
+
+/* Área "usuário / Sair" no menu */
+nav::after { content: ""; display: table; clear: both; }
+.nav-direita { float: right; margin: 0; }
+.nav-direita .usuario { color: #bee3f8; padding: 12px 8px; display: inline-block; }
