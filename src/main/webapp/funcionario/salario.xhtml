@@ -10,40 +10,60 @@
         <div class="cartao">
             <h2>Atualizar salário</h2>
 
-            <dl class="detalhe">
-                <dt>Funcionário</dt>
-                <dd>#{salarioController.funcionario.nome} (#{salarioController.funcionario.matricula})</dd>
-                <dt>Cargo</dt>
-                <dd>#{salarioController.funcionario.cargo.nome}</dd>
-                <dt>Salário atual</dt>
-                <dd><h:outputText value="#{salarioController.funcionario.salarioAtual}">
-                    <f:convertNumber type="currency" currencySymbol="R$"/>
-                </h:outputText></dd>
-            </dl>
-
             <h:form id="form">
-                <h:panelGrid columns="3" styleClass="formulario">
-                    <h:outputLabel for="novoSalario" value="Novo salário (R$) *"/>
-                    <h:inputText id="novoSalario" value="#{salarioController.novoSalario}"
-                                 required="true" requiredMessage="Informe o novo salário"
-                                 converterMessage="Valor inválido. Exemplo: 5200,00">
-                        <f:convertNumber minFractionDigits="2" maxFractionDigits="2"/>
-                    </h:inputText>
-                    <h:message for="novoSalario" styleClass="campo-erro"/>
 
-                    <h:outputLabel for="motivo" value="Motivo *"/>
-                    <h:inputText id="motivo" value="#{salarioController.motivo}"
-                                 maxlength="255" required="true"
-                                 requiredMessage="O motivo é obrigatório"/>
-                    <h:message for="motivo" styleClass="campo-erro"/>
-                </h:panelGrid>
+                <!-- ============ DADOS ATUAIS (somente leitura) ============ -->
+                <fieldset class="grupo">
+                    <legend>Dados atuais</legend>
+                    <h:panelGrid columns="2" styleClass="formulario">
 
-                <br/>
-                <h:commandButton value="Confirmar reajuste" action="#{salarioController.salvar}"/>
-                <h:link value="Cancelar" outcome="detalhe" styleClass="botao botao-cinza"
-                        rendered="#{not empty salarioController.funcionario}">
-                    <f:param name="id" value="#{salarioController.funcionario.id}"/>
-                </h:link>
+                        <h:outputLabel for="funcionario" value="Funcionário"/>
+                        <h:inputText id="funcionario"
+                                     value="#{salarioController.funcionario.nome} (#{salarioController.funcionario.matricula})"
+                                     readonly="true"/>
+
+                        <h:outputLabel for="cargo" value="Cargo"/>
+                        <h:inputText id="cargo"
+                                     value="#{salarioController.funcionario.cargo.nome}"
+                                     readonly="true"/>
+
+                        <h:outputLabel for="salarioAtual" value="Salário atual"/>
+                        <h:inputText id="salarioAtual"
+                                     value="#{salarioController.funcionario.salarioAtual}"
+                                     readonly="true">
+                            <f:convertNumber type="currency" currencySymbol="R$"/>
+                        </h:inputText>
+                    </h:panelGrid>
+                </fieldset>
+
+                <!-- ============ NOVO SALÁRIO (editável) ============ -->
+                <fieldset class="grupo">
+                    <legend>Novo salário</legend>
+                    <h:panelGrid columns="3" styleClass="formulario">
+
+                        <h:outputLabel for="novoSalario" value="Novo salário (R$) *"/>
+                        <h:inputText id="novoSalario" value="#{salarioController.novoSalario}"
+                                     required="true" requiredMessage="Informe o novo salário"
+                                     converterMessage="Valor inválido. Exemplo: 5200,00">
+                            <f:convertNumber minFractionDigits="2" maxFractionDigits="2"/>
+                        </h:inputText>
+                        <h:message for="novoSalario" styleClass="campo-erro"/>
+
+                        <h:outputLabel for="motivo" value="Motivo *"/>
+                        <h:inputText id="motivo" value="#{salarioController.motivo}"
+                                     maxlength="255" required="true"
+                                     requiredMessage="O motivo é obrigatório"/>
+                        <h:message for="motivo" styleClass="campo-erro"/>
+                    </h:panelGrid>
+                </fieldset>
+
+                <div class="botoes">
+                    <h:commandButton value="Confirmar reajuste" action="#{salarioController.salvar}"/>
+                    <h:link value="Cancelar" outcome="detalhe" styleClass="botao botao-cinza"
+                            rendered="#{not empty salarioController.funcionario}">
+                        <f:param name="id" value="#{salarioController.funcionario.id}"/>
+                    </h:link>
+                </div>
             </h:form>
         </div>
     </ui:define>
