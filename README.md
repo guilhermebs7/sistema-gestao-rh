@@ -42,7 +42,7 @@ Aplicação web corporativa para o departamento de Recursos Humanos gerenciar **
 | 🔴 **WildFly** | 10.1.0.Final | Servidor de aplicação (Java EE 7) |
 | 🔒 **jBCrypt** | 0.4 | Hash de senhas |
 | 🎨 **HTML + CSS** | — | Interface responsiva, sem frameworks externos |
-| 🧪 **JUnit + Mockito** | 4.12 / 3.12 | Testes automatizados |
+
 
 > **Por que não Spring Boot?** O objetivo é aprender a stack Java EE clássica. Tudo que o projeto usa (JSF, CDI, EJB, JPA, Bean Validation) **já vem dentro do WildFly**, então o `.war` leva apenas o código da aplicação e o jBCrypt.
 
