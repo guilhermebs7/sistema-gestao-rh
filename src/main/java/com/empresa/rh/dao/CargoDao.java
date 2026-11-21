@@ -4,7 +4,8 @@ import com.empresa.rh.model.Cargo;
 import java.util.List;
 import javax.ejb.Stateless;
 
-@Stateless
+@Stateless // ativa automaticamente o gerenciamento de transações e injeção do EntityManager pelo servidor (WildFly), recursos essenciais para acessar o banco
+//ele sinaliza uma classe de lógica de negócio que não guarda dados do usuário entre uma requisição e outra
 public class CargoDao extends GenericDao<Cargo> {
 
     public CargoDao() {
